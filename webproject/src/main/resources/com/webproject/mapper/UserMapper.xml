@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webproject.mapper.UserMapper">	
+
+	<insert id="signup">
+		INSERT INTO user
+			 (
+			   userId,
+			   userPass,
+			   userName,
+               userPhon
+			 )
+		VALUES
+			 (
+			   #{userId},
+			   #{userPass},
+			   #{userName},
+               #{userPhon}
+			 )
+	</insert>
+
+	<select id="signin" resultType="com.webproject.domain.User">
+	   select
+	      userId, userName, userPass, userPhon, userAddr1, userAddr2,userAddr2, regDate,verify
+	   from
+	      user
+	   where userId=#{userId}
+	</select>
+    
+	
+
+</mapper>

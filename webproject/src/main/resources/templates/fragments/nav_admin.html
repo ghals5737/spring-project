@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="AdminNav">   
+    <div th:if="${session.user!=null}">   
+            <ul>
+                <li><a href="/">일반 화면</a></li>
+                <li><a href="/user/signout">로그아웃</a></li>
+            </ul>
+    </div>    
+  </div>
+</html>

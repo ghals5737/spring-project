@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <div th:fragment="commonNav">
+       
+    <div th:if="${session.user==null}">   
+        <ul>
+            <li><a href="/user/signin">로그인</a></li>
+            <li><a href="/user/signup">회원가입</a></li>
+        </ul>
+    </div>
+    <div th:if="${session.user!=null}">   
+            <ul>
+                <li th:if="${session.user.verify==9}"><a href="/admin/index">관리자 화면</a></li>
+                <li th:text="${session.user.userName}+'님 환영합니다.'"></li>
+                <li><a href="/shop/cartList">카트 리스트</a></li>
+                <li><a href="/shop/orderList">주문 리스트</a></li>
+                <li><a href="/user/signout">로그아웃</a></li>
+            </ul>
+        </div>
+  
+    
+  </div>
+</html>

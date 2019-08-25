@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>KUBG</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="/js/jquery.min.js"></script>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/bootstrap.min.js"></script>
+    <style>
+            body { font-family:'맑은 고딕', verdana; padding:0; margin:0; }
+            ul { padding:0; margin:0; list-style:none;  }
+           
+            div#root { width:90%; margin:0 auto; }
+            
+            header#header { font-size:60px; padding:20px 0; }
+            header#header h1 a { color:#000; font-weight:bold; }
+            
+            nav#nav { padding:10px; text-align:right; }
+            nav#nav ul li { display:inline-block; margin-left:10px; }
+           
+              section#container { padding:20px 0; border-top:2px solid #eee; border-bottom:2px solid #eee; }
+            section#container::after { content:""; display:block; clear:both; }
+            aside { float:left; width:200px; }
+            div#container_box { float:right; width:calc(100% - 200px - 20px); }
+            
+            aside ul li { text-align:center; margin-bottom:10px; }
+            aside ul li a { display:block; width:100%; padding:10px 0;}
+            aside ul li a:hover { background:#eee; }
+            
+            footer#footer { background:#f9f9f9; padding:20px; }
+            footer#footer ul li { display:inline-block; margin-right:10px; }
+    </style>
+    <style>
+            .inputArea { margin:10px 0; }
+            select { width:100px; }
+            label { display:inline-block; width:70px; padding:5px; }
+            label[for='gdsDes'] { display:block; }
+            input { width:150px; }
+            textarea#gdsDes { width:400px; height:180px; }
+            #container_box table td { width:100px; }
+        </style> 
+        <style>
+           #container_box table{width: 900px;}
+           #container_box table th{font-size: 20px;font-weight: bold; text-align: center;padding: 10px;border-bottom: 2px solid #666;}
+    
+           #container_box table tr:hover{background: #eee;}
+           #container_box table td{padding: 10px;text-align: center;}
+           #container_box table img {width: 150px; height: auto;}
+        </style>          
+</head>
+<body>
+    <div id="root">
+        <header id="header">
+            <div id="header_box">
+                <div th:include="fragments/header_admin :: header_admin"></div>                
+            </div>
+        </header>
+
+        <nav id="nav">
+            <div id="nav_box">
+                <div th:replace="fragments/nav_admin :: AdminNav"></div>
+            </div>
+        </nav>
+
+        <section id="container">
+            <aside>
+                <div th:replace="fragments/aside :: aside"></div>
+            </aside>
+            <div id="container_box">
+                <!--<h2>상품 등록</h2>-->
+                <table>
+                    <thead>
+                        <tr>
+                        <th>썸네일</th>
+                        <th>번호</th>
+                        <th>이름</th>
+                        <th>카테고리</th>
+                        <th>가격</th>
+                        <th>수량</th>
+                        <th>등록날짜</th>
+                        </tr>
+                    </thead>
+                    <tbody>                        
+                        <tr th:each="list:${list}">
+                            <td>
+                                <img th:src="@{${list.pdThumbImg}}">
+                            </td>
+                            <td th:text="${list.pdNum}"></td>
+                            <td >
+                               <a th:href="@{/admin/product/view(n=${list.pdNum})}" th:text="${list.pdName}">${list.gdsName}</a>
+                            </td>
+                            <td th:text="${list.cateName}"></td>
+                            <td th:text="${#numbers.formatInteger(list.pdPrice,3,'COMMA')}"></td>
+                            <td th:text="${list.pdStock}"></td>
+                            <td th:text="${#calendars.format(list.pdDate,'yyyy-MM-dd')}"></td>
+                        </tr>                       
+                    </tbody>
+                </table>               
+            </div>
+        </section>
+
+        <footer id="footer">
+                <div id="footer_box">
+                    <div th:replace="fragments/footer :: commonFooter"></div>
+                </div>
+        </footer>
+    </div>
+</body>
+</html>

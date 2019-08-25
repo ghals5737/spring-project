@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.webproject.mapper.AdminMapper">	
+
+	<select id="category" resultType="com.webproject.domain.Category">
+	  select 
+	     cateName, cateCode, cateCodeRef
+	  from product_category	     
+	</select>
+	
+	<insert id="register">
+         insert into product
+		 (			 
+			 pdName,
+			 cateCode,
+			 pdPrice,
+			 pdStock,
+			 pdDes,
+			 pdImg,
+			 pdThumbImg
+		 )
+		 values
+		 (
+             #{pdName},
+			 #{cateCode},
+			 #{pdPrice},
+			 #{pdStock},
+			 #{pdDes},
+			 #{pdImg},
+			 #{pdThumbImg}
+		 )
+	</insert>
+    <select id="productlist" resultType="com.webproject.domain.ProductView">
+	    select
+		     p.pdNum, p.pdName, p.cateCode, c.cateCodeRef, c.cateName, pdPrice, pdStock, pdDes, pdImg, pdDate,pdThumbImg
+	     from product p
+             inner join product_category c
+                 on p.cateCode = c.cateCode    
+	</select>
+	<!--<select id="productView" resultType="com.webproject.domain.Product">
+	    select
+		     pdNum,pdName,cateCode,pdPrice,pdStock,pdDes,pdImg,pdDate
+	    from product
+		where pdNum=#{pdNum}
+	</select>-->
+
+	<select id="getProductView" resultType="com.webproject.domain.ProductView">
+	   select
+         p.pdNum, p.pdName, p.cateCode, c.cateCodeRef, c.cateName, pdPrice, pdStock, pdDes, pdImg, pdDate,pdThumbImg
+         from product p
+             inner join product_category c
+                 on p.cateCode = c.cateCode          
+            where p.pdNum = #{pdNum}		   
+	</select>
+
+	<update id="productModify">
+	   update product
+	      set
+		     pdName=#{pdName},
+			 cateCode=#{cateCode},
+			 pdPrice=#{pdPrice},
+			 pdStock=#{pdStock},
+			 pdDes=#{pdDes},
+			 pdImg=#{pdImg},
+			 pdThumbImg=#{pdThumbImg}
+          where pdNum=#{pdNum}
+	</update>
+
+	<delete id="productDelete">
+	     delete 
+		 from product
+		 where pdNum=#{pdNum}
+	</delete>
+	<!-- 모든 유저의 주문 목록 -->
+    <select id="orderList" resultType="com.webproject.domain.Order">
+        select * from shop.order
+    </select>
+
+    <!-- 특정 주문 목록 -->
+    <select id="orderView" parameterType="String" resultType="com.webproject.domain.OrderList">
+        SELECT 
+            o.orderId,
+            o.userId,
+            o.orderRec,
+            o.userAddr1,
+            o.userAddr2,
+            o.userAddr3,
+            o.orderPhon,
+            o.amount,
+            o.orderDate,
+			o.delivery,
+            d.orderDetailsNum,
+            d.pdNum,
+            d.cartStock,
+            g.pdName,
+            g.pdThumbImg,
+            g.pdPrice        
+        FROM shop.order o
+            INNER JOIN shop.order_details d ON o.orderId = d.orderId
+            INNER JOIN shop.product g ON d.pdNum = g.pdNum
+            WHERE  o.orderId = #{orderId}
+    </select>
+
+	<update id="delivery">
+		update shop.order
+			set delivery = #{delivery}
+		where orderId = #{orderId}	
+	</update>
+
+	<!-- 상품 수량 조절 -->
+	<update id="changeStock">
+		update product
+			set pdStock = pdStock - #{pdStock}
+		where pdNum = #{pdNum}
+	</update>
+
+	<select id="getOrderDetails" resultType="com.webproject.domain.OrderDetail">
+	    select orderId,pdNum,cartStock
+		from order_details where orderId=#{orderId}
+	</select>
+
+	<!--  모든 소감(댓글) -->
+	<select id="allReply" resultType="com.webproject.domain.ReplyList">
+		select	r.pdNum,r.userId,r.repNum,r.repCon,r.repDate, m.userName
+		from shop.reply r
+		inner join shop.user m on r.userId = m.userId;
+	</select>
+
+	<!-- 소감(댓글) 지우기 -->
+	<delete id="deleteReply" parameterType="int">
+		delete from reply
+		where repNum = #{repNum}
+	</delete> 
+</mapper>
